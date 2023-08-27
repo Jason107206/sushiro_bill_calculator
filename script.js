@@ -23,7 +23,7 @@ function constructPerson(personID) {
   personContainer.setAttribute('id', 'person' + personID);
   
   var personTitle = document.createElement('h3');
-  personTitle.textContent = 'Person ' + (personID + 1);
+  personTitle.textContent = personList[personID].name;
 
   var personTotal = document.createElement('span');
   personTotal.textContent = '$' + personList[personID].total.toFixed(1);
@@ -66,6 +66,48 @@ function constructPersonList() {
 }
 
 function initializePerson(personID) {
+  function calculateTotal() {
+    person.service = ((person.red * 12 + person.silver * 17 + person.gold * 22 + person.black * 27) * 0.1);
+    person.total = ((person.red * 12 + person.silver * 17 + person.gold * 22 + person.black * 27) * 1.1);
+    document.getElementById('serviceFee').textContent = '$' + person.service.toFixed(1);
+    document.getElementById('totalSum').textContent = '$' + person.total.toFixed(1);
+  }
+  
+  function handleDishChange(type, change) {
+    if (type == 'red') {
+      if (person.red > 0 || change > 0) {
+        person.red += change;
+        multiplier = 12;
+
+        document.getElementById('red').value = person.red;
+      }
+    } else if (type == 'silver') {
+      if (person.silver > 0 || change > 0) {
+        person.silver += change;
+        multiplier = 17;
+  
+        document.getElementById('silver').value = person.silver;
+      }
+    } else if (type == 'gold') {
+      if (person.gold > 0 || change > 0) {
+        person.gold += change;
+        multiplier = 22;
+  
+        document.getElementById('gold').value = person.gold;
+      }
+    } else if (type == 'black') {
+      if (person.black > 0 || change > 0) {
+        person.black += change;
+        multiplier = 27;
+  
+        document.getElementById('black').value = person.black;
+      }
+    }
+
+    document.getElementById(type + 'Sum').textContent = '$' + (person[type] * multiplier).toString();
+    calculateTotal();
+  }
+  
   function handleDishInput(type) {
     userInput = document.getElementById(type).value;
     if (userInput === '') {
@@ -84,26 +126,60 @@ function initializePerson(personID) {
       multiplier = 27;
     }
 
-    person.total = ((person.red * 12 + person.silver * 17 + person.gold * 22 + person.black * 27) * 1.1);
-    
     document.getElementById(type + 'Sum').textContent = '$' + (person[type] * multiplier).toString();
-    document.getElementById('totalSum').textContent = '$' + person.total.toFixed(2);
+    calculateTotal();
+  }
+
+  function handleNameInput() {
+    person.name = document.getElementById('personName').value;
   }
 
   function handleRed() {
     handleDishInput('red');
   }
 
+  function handleRedAdd() {
+    handleDishChange('red', 1);
+  }
+  
+  function handleRedMinus() {
+    handleDishChange('red', -1);
+  }
+
   function handleSilver() {
     handleDishInput('silver');
   }
 
+  function handleSilverAdd() {
+    handleDishChange('silver', 1);
+  }
+  
+  function handleSilverMinus() {
+    handleDishChange('silver', -1);
+  }
+  
   function handleGold() {
     handleDishInput('gold');
   }
 
+  function handleGoldAdd() {
+    handleDishChange('gold', 1);
+  }
+  
+  function handleGoldMinus() {
+    handleDishChange('gold', -1);
+  }
+
   function handleBlack() {
     handleDishInput('black');
+  }
+
+  function handleBlackAdd() {
+    handleDishChange('black', 1);
+  }
+  
+  function handleBlackMinus() {
+    handleDishChange('black', -1);
   }
 
   function storePerson() {
@@ -121,20 +197,41 @@ function initializePerson(personID) {
     document.getElementById('silverSum').textContent = '';
     document.getElementById('goldSum').textContent = '';
     document.getElementById('blackSum').textContent = '';
+    document.getElementById('serviceFee').textContent = '';
     document.getElementById('totalSum').textContent = '';
 
-    document.getElementById('red').removeEventListener('input', handleRed);
-  
-    document.getElementById('silver').removeEventListener('input', handleSilver);
-  
-    document.getElementById('gold').removeEventListener('input', handleGold);
-  
-    document.getElementById('black').removeEventListener('input', handleBlack);
+    document.getElementById('personName').removeEventListener('input', handleNameInput);
 
+    document.getElementById('red').removeEventListener('input', handleRed);
+    
+    document.getElementById('redAdd').removeEventListener('click', handleRedAdd);
+    
+    document.getElementById('redMinus').removeEventListener('click', handleRedMinus);
+    
+    document.getElementById('silver').removeEventListener('input', handleSilver);
+    
+    document.getElementById('silverAdd').removeEventListener('click', handleSilverAdd);
+    
+    document.getElementById('redMinus').removeEventListener('click', handleSilverMinus);
+    
+    document.getElementById('gold').removeEventListener('input', handleGold);
+    
+    document.getElementById('goldAdd').removeEventListener('click', handleGoldAdd);
+    
+    document.getElementById('redMinus').removeEventListener('click', handleGoldMinus);
+    
+    document.getElementById('black').removeEventListener('input', handleBlack);
+    
+    document.getElementById('blackAdd').removeEventListener('click', handleBlackAdd);
+    
+    document.getElementById('blackMinus').removeEventListener('click', handleBlackMinus);
+    
     document.getElementById('savePerson').removeEventListener('click', storePerson);
   }
   
   var person = personList[personID];
+
+  document.getElementById('personName').value = personList[personID].name;
   
   document.getElementById('red').value = person.red;
   document.getElementById('silver').value = person.silver;
@@ -145,16 +242,34 @@ function initializePerson(personID) {
   document.getElementById('silverSum').textContent = '$' + (person.silver * 17).toString();
   document.getElementById('goldSum').textContent = '$' + (person.gold * 22).toString();
   document.getElementById('blackSum').textContent = '$' + (person.black * 27).toString();
+  document.getElementById('serviceFee').textContent = '$' + person.service.toFixed(1);
   document.getElementById('totalSum').textContent = '$' + person.total.toFixed(1);
-  document.getElementById('personId').textContent = 'Person ' + (personID + 1).toString();
+
+  document.getElementById('personName').addEventListener('input', handleNameInput);
   
   document.getElementById('red').addEventListener('input', handleRed);
-
+  
+  document.getElementById('redAdd').addEventListener('click', handleRedAdd);
+  
+    document.getElementById('redMinus').addEventListener('click', handleRedMinus);
+  
   document.getElementById('silver').addEventListener('input', handleSilver);
 
+      document.getElementById('silverAdd').addEventListener('click', handleSilverAdd);
+
+  document.getElementById('silverMinus').addEventListener('click', handleSilverMinus);
+  
   document.getElementById('gold').addEventListener('input', handleGold);
 
+  document.getElementById('goldAdd').addEventListener('click', handleGoldAdd);
+
+  document.getElementById('goldMinus').addEventListener('click', handleGoldMinus);
+  
   document.getElementById('black').addEventListener('input', handleBlack);
+
+  document.getElementById('blackAdd').addEventListener('click', handleBlackAdd);
+
+  document.getElementById('blackMinus').addEventListener('click', handleBlackMinus);
   
   document.getElementById('savePerson').addEventListener('click', storePerson);
 }
@@ -166,7 +281,7 @@ document.getElementById('welcomeStart').addEventListener('click', () => {
 
 document.getElementById('addPerson').addEventListener('click', () => {
   var person = {
-    red: 0, silver: 0, gold: 0, black: 0, other: [], total: 0
+    name: 'Person ' + personList.length.toString(), red: 0, silver: 0, gold: 0, black: 0, other: [], service: 0, total: 0
   }
   personList.push(person);
   constructPerson(personList.length - 1);
