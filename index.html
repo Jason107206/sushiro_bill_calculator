@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sushiro Bill Calculator</title>
+  <link href="style.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+  <div id="mainScreen" class="screen">
+    <span id="welcomeTitle">
+      <span>Sushiro</span>
+      <span>Bill</span>
+      <span>Calculator</span>
+    </span>
+    <input type="button" id="welcomeStart" value="Start" />
+  </div>
+  <div id="overviewScreen" class="screen" hidden>
+    <div id="personListContainer"></div>
+    <div id="totalContainer">
+      <h3>Total</h3>
+      <span id="totalValue"></span>
+    </div>
+    <input type="button" id="addPerson" value="Add Person" />
+  </div>
+  <div id="personScreen" class="screen" hidden>
+    <h3 id="personId"></h3>
+    <div>
+      <label for="red">Red Dish ($12):</label>
+      <input type="number" id="red" />
+      <span id="redSum"></span>
+    </div>
+    <div>
+      <label for="silver">Silver Dish ($17):</label>
+      <input type="number" id="silver" />
+      <span id="silverSum"></span>
+    </div>
+    <div>
+      <label for="gold">Gold Dish ($22):</label>
+      <input type="number" id="gold" />
+      <span id="goldSum"></span>
+    </div>
+    <div>
+      <label for="black">Black Dish ($27):</label>
+      <input type="number" id="black" />
+      <span id="blackSum"></span>
+    </div>
+    <div id="otherItems"></div>
+    <input type="button" id="savePerson" value="Save and Exit" />
+    <span id="totalSum"></span>
+  </div>
+  <script src="script.js"></script>
+</body>
+
+</html>

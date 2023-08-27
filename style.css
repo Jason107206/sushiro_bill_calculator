@@ -1,0 +1,95 @@
+@keyframes fadeOutLeft {
+  from {
+    translate: 0%;
+    opacity: 1;
+  }
+
+  to {
+    translate: -100%;
+    opacity: 0;
+  }
+}
+
+@keyframes fadeInRight {
+  from {
+    translate: 100%;
+    opacity: 0;
+  }
+
+  to {
+    translate: 0%;
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOutRight {
+  from {
+    translate: 0%;
+    opacity: 1;
+  }
+
+  to {
+    translate: 100%;
+    opacity: 0;
+  }
+}
+
+@keyframes fadeInLeft {
+  from {
+    translate: -100%;
+    opacity: 0;
+  }
+
+  to {
+    translate: 0%;
+    opacity: 1;
+  }
+}
+
+[hidden] {
+  display: none !important;
+}
+
+html,
+body,
+.screen {
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  margin: 0;
+  overflow: hidden;
+}
+
+.screen {
+  box-sizing: border-box;
+  padding: 1rem;
+}
+
+#mainScreen {
+  align-content: center;
+  display: grid;
+  gap: 2rem;
+}
+
+#welcomeTitle {
+  display: grid;
+  font-size: 3rem;
+  font-style: italic;
+  line-height: 3.5rem;
+}
+
+#welcomeStart {
+  width: 10rem;
+}
+
+#personListContainer div,
+#totalContainer {
+  display: flex;
+  gap: 0.5rem;
+}
+
+input[type="button"] {
+  height: 2.25rem;
+}
