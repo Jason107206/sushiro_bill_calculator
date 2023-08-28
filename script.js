@@ -24,7 +24,7 @@ function constructPerson(personID, animate) {
   personContainer.setAttribute('class', 'personItemContainer');
 
   var personImage = document.createElement('img');
-  personImage.setAttribute('src', '/image/person.svg');
+  personImage.setAttribute('src', 'image/person.svg');
   personImage.setAttribute('class', 'personImage');
 
   var personTitle = document.createElement('div');
