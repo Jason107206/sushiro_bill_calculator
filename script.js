@@ -281,7 +281,7 @@ document.getElementById('welcomeStart').addEventListener('click', () => {
 
 document.getElementById('addPerson').addEventListener('click', () => {
   var person = {
-    name: 'Person ' + personList.length.toString(), red: 0, silver: 0, gold: 0, black: 0, other: [], service: 0, total: 0
+    name: 'Person ' + (personList.length + 1).toString(), red: 0, silver: 0, gold: 0, black: 0, other: [], service: 0, total: 0
   }
   personList.push(person);
   constructPerson(personList.length - 1);
