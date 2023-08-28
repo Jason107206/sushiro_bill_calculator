@@ -2,25 +2,26 @@ var personList = [];
 
 function changeScreen(targetFrom, targetTo, revert) {
   if (revert == 0) {
-    document.getElementById(targetFrom).style.animation = '0.5s fadeOutLeft';
+    document.getElementById(targetFrom).style.animation = '0.6s ease-in fadeOutLeft';
   } else {
-    document.getElementById(targetFrom).style.animation = '0.5s fadeOutRight';
+    document.getElementById(targetFrom).style.animation = '0.6s ease-in fadeOutRight';
   }
 
   setTimeout(() => {
     document.getElementById(targetFrom).hidden = 1;
     document.getElementById(targetTo).hidden = 0;
     if (revert == 0) {
-      document.getElementById(targetTo).style.animation = '0.5s ease-out fadeInRight';
+      document.getElementById(targetTo).style.animation = '0.6s ease-out fadeInRight';
     } else {
-      document.getElementById(targetTo).style.animation = '0.5s ease-out fadeInLeft';
+      document.getElementById(targetTo).style.animation = '0.6s ease-out fadeInLeft';
     }
-  }, 500);
+  }, 600);
 }
 
 function constructPerson(personID) {
   var personContainer = document.createElement('div');
   personContainer.setAttribute('id', 'person' + personID);
+  personContainer.setAttribute('class', 'personContainer');
   
   var personTitle = document.createElement('h3');
   personTitle.textContent = personList[personID].name;

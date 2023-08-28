@@ -1,3 +1,15 @@
+@keyframes fadeInUp {
+  from {
+    translate: 0% 50%;
+    opacity: 0;
+  }
+
+  to {
+    translateY: 0%;
+    opacity: 1;
+  }
+}
+
 @keyframes fadeOutLeft {
   from {
     translate: 0%;
@@ -59,7 +71,7 @@ body,
 
 body {
   margin: 0;
-  overflow: hidden;
+  overflow-x: hidden;
 }
 
 .screen {
@@ -74,6 +86,7 @@ body {
 }
 
 #welcomeTitle {
+  animation: 1s fadeInUp;
   display: grid;
   font-size: 3rem;
   font-style: italic;
@@ -81,16 +94,26 @@ body {
 }
 
 #welcomeStart {
+  animation: 1s fadeInUp;
   width: 10rem;
 }
 
-#personListContainer div,
+.personContainer,
 #totalContainer {
-  display: flex;
+  align-items: center;
+  display: grid;
   gap: 0.5rem;
 }
 
-input[type="button"] {
+.personContainer {
+  grid-template-columns: auto 1fr auto auto;
+}
+
+#totalContainer {
+  grid-template-columns: 1fr auto;
+}
+
+input {
   height: 2.25rem;
   min-width: 2.25rem;
 }
