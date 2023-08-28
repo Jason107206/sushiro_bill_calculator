@@ -2,67 +2,104 @@ var personList = [];
 
 function changeScreen(targetFrom, targetTo, revert) {
   if (revert == 0) {
-    document.getElementById(targetFrom).style.animation = '0.6s ease-in fadeOutLeft';
+    document.getElementById(targetFrom).style.animation = '0.8s ease-in fadeOutLeft';
   } else {
-    document.getElementById(targetFrom).style.animation = '0.6s ease-in fadeOutRight';
+    document.getElementById(targetFrom).style.animation = '0.8s ease-in fadeOutRight';
   }
 
   setTimeout(() => {
     document.getElementById(targetFrom).hidden = 1;
     document.getElementById(targetTo).hidden = 0;
     if (revert == 0) {
-      document.getElementById(targetTo).style.animation = '0.6s ease-out fadeInRight';
+      document.getElementById(targetTo).style.animation = '0.8s ease-out fadeInRight';
     } else {
-      document.getElementById(targetTo).style.animation = '0.6s ease-out fadeInLeft';
+      document.getElementById(targetTo).style.animation = '0.8s ease-out fadeInLeft';
     }
-  }, 600);
+  }, 800);
 }
 
-function constructPerson(personID) {
+function constructPerson(personID, animate) {
   var personContainer = document.createElement('div');
   personContainer.setAttribute('id', 'person' + personID);
-  personContainer.setAttribute('class', 'personContainer');
-  
-  var personTitle = document.createElement('h3');
-  personTitle.textContent = personList[personID].name;
+  personContainer.setAttribute('class', 'personItemContainer');
+
+  var personImage = document.createElement('img');
+  personImage.setAttribute('src', '/image/person.svg');
+  personImage.setAttribute('class', 'personImage');
+
+  var personTitle = document.createElement('div');
+  personTitle.setAttribute('class', 'personItemTitle');
+
+  var personControl = document.createElement('div');
+  personControl.setAttribute('class', 'personItemControl');
+
+  var personName = document.createElement('h3');
+  personName.textContent = personList[personID].name;
 
   var personTotal = document.createElement('span');
   personTotal.textContent = '$' + personList[personID].total.toFixed(1);
-  
+
   var personSelect = document.createElement('input');
   personSelect.setAttribute('type', 'button');
   personSelect.setAttribute('id', 'person' + personID + '_select');
+  personSelect.setAttribute('class', 'primaryButton');
   personSelect.setAttribute('value', 'Select');
 
-  var personRemove = document.createElement('input');
-  personRemove.setAttribute('type', 'button');
+  var personRemove = document.createElement('button');
   personRemove.setAttribute('id', 'person' + personID + '_remove');
-  personRemove.setAttribute('value', 'Remove');
+  personRemove.setAttribute('class', 'iconButton');
+  personRemove.setAttribute('value', 'Delete');
 
+  var personRemoveIcon = document.createElement('img');
+  personRemoveIcon.setAttribute('src', 'image/delete.svg');
+
+  personRemove.appendChild(personRemoveIcon);
+
+  personTitle.appendChild(personName);
+  personTitle.appendChild(personTotal);
+
+  personControl.appendChild(personSelect);
+  personControl.appendChild(personRemove);
+
+  personContainer.appendChild(personImage);
   personContainer.appendChild(personTitle);
-  personContainer.appendChild(personTotal);
-  personContainer.appendChild(personSelect);
-  personContainer.appendChild(personRemove);
+  personContainer.appendChild(personControl);
+
+  if (animate == 1) {
+    personContainer.style.animation = '0.6s ease-out fadeInRight';
+  }
   document.getElementById('personListContainer').appendChild(personContainer);
 
-  document.getElementById('person' + personID + '_select').addEventListener('click', () => {
+  if (animate == 1) {
+    setTimeout(() => {
+      personContainer.style.animation = '';
+    }, 600);
+  }
+
+  personSelect.addEventListener('click', () => {
     changeScreen('overviewScreen', 'personScreen', 0);
     initializePerson(personID);
   });
 
-  document.getElementById('person' + personID + '_remove').addEventListener('click', () => {
+  personRemove.addEventListener('click', () => {
     personList.splice(personID, 1);
-    constructPersonList();
-  })
+    document.getElementById('person' + personID).style.animation = '0.6s ease-in fadeOutRight';
+    setTimeout(() => {
+      document.getElementById('person' + personID).remove();
+      constructPersonList();
+    }, 600);
+  });
 }
 
 function constructPersonList() {
   var total = 0;
   document.getElementById('personListContainer').innerHTML = '';
+
   for (let i = 0; i < personList.length; i++) {
     total += personList[i].total;
     constructPerson(i);
   }
+
   document.getElementById('totalValue').textContent = '$' + total.toFixed(1);
 }
 
@@ -73,42 +110,7 @@ function initializePerson(personID) {
     document.getElementById('serviceFee').textContent = '$' + person.service.toFixed(1);
     document.getElementById('totalSum').textContent = '$' + person.total.toFixed(1);
   }
-  
-  function handleDishChange(type, change) {
-    if (type == 'red') {
-      if (person.red > 0 || change > 0) {
-        person.red += change;
-        multiplier = 12;
 
-        document.getElementById('red').value = person.red;
-      }
-    } else if (type == 'silver') {
-      if (person.silver > 0 || change > 0) {
-        person.silver += change;
-        multiplier = 17;
-  
-        document.getElementById('silver').value = person.silver;
-      }
-    } else if (type == 'gold') {
-      if (person.gold > 0 || change > 0) {
-        person.gold += change;
-        multiplier = 22;
-  
-        document.getElementById('gold').value = person.gold;
-      }
-    } else if (type == 'black') {
-      if (person.black > 0 || change > 0) {
-        person.black += change;
-        multiplier = 27;
-  
-        document.getElementById('black').value = person.black;
-      }
-    }
-
-    document.getElementById(type + 'Sum').textContent = '$' + (person[type] * multiplier).toString();
-    calculateTotal();
-  }
-  
   function handleDishInput(type) {
     userInput = document.getElementById(type).value;
     if (userInput === '') {
@@ -140,11 +142,21 @@ function initializePerson(personID) {
   }
 
   function handleRedAdd() {
-    handleDishChange('red', 1);
+    person.red++;
+
+    document.getElementById('red').value = person.red;
+    document.getElementById('redSum').textContent = '$' + (person.red * 12).toString();
+    calculateTotal();
   }
-  
+
   function handleRedMinus() {
-    handleDishChange('red', -1);
+    if (person.red > 0) {
+      person.red--;
+
+      document.getElementById('red').value = person.red;
+      document.getElementById('redSum').textContent = '$' + (person.red * 12).toString();
+      calculateTotal();
+    }
   }
 
   function handleSilver() {
@@ -152,23 +164,43 @@ function initializePerson(personID) {
   }
 
   function handleSilverAdd() {
-    handleDishChange('silver', 1);
+    person.silver++;
+
+    document.getElementById('silver').value = person.silver;
+    document.getElementById('silverSum').textContent = '$' + (person.silver * 17).toString();
+    calculateTotal();
   }
-  
+
   function handleSilverMinus() {
-    handleDishChange('silver', -1);
+    if (person.silver > 0) {
+      person.silver--;
+
+      document.getElementById('silver').value = person.silver;
+      document.getElementById('silverSum').textContent = '$' + (person.silver * 17).toString();
+      calculateTotal();
+    }
   }
-  
+
   function handleGold() {
     handleDishInput('gold');
   }
 
   function handleGoldAdd() {
-    handleDishChange('gold', 1);
+    person.gold++;
+
+    document.getElementById('gold').value = person.gold;
+    document.getElementById('goldSum').textContent = '$' + (person.gold * 22).toString();
+    calculateTotal();
   }
-  
+
   function handleGoldMinus() {
-    handleDishChange('gold', -1);
+    if (person.gold > 0) {
+      person.gold--;
+
+      document.getElementById('gold').value = person.gold;
+      document.getElementById('goldSum').textContent = '$' + (person.gold * 22).toString();
+      calculateTotal();
+    }
   }
 
   function handleBlack() {
@@ -176,69 +208,70 @@ function initializePerson(personID) {
   }
 
   function handleBlackAdd() {
-    handleDishChange('black', 1);
+    person.black++;
+
+    document.getElementById('black').value = person.black;
+    document.getElementById('blackSum').textContent = '$' + (person.black * 27).toString();
+    calculateTotal();
   }
-  
+
   function handleBlackMinus() {
-    handleDishChange('black', -1);
+    if (person.black > 0) {
+      person.black--;
+
+      document.getElementById('black').value = person.black;
+      document.getElementById('blackSum').textContent = '$' + (person.black * 27).toString();
+      calculateTotal();
+    }
   }
 
   function storePerson() {
     personList.splice(personID, 1, person);
-    
+
     changeScreen('personScreen', 'overviewScreen', 1);
     constructPersonList();
 
-    document.getElementById('red').value = '';
-    document.getElementById('silver').value = '';
-    document.getElementById('gold').value = '';
-    document.getElementById('black').value = '';
-    
-    document.getElementById('redSum').textContent = '';
-    document.getElementById('silverSum').textContent = '';
-    document.getElementById('goldSum').textContent = '';
-    document.getElementById('blackSum').textContent = '';
-    document.getElementById('serviceFee').textContent = '';
-    document.getElementById('totalSum').textContent = '';
+    setTimeout(() => {
+      document.getElementById('red').value = '';
+      document.getElementById('silver').value = '';
+      document.getElementById('gold').value = '';
+      document.getElementById('black').value = '';
+
+      document.getElementById('redSum').textContent = '';
+      document.getElementById('silverSum').textContent = '';
+      document.getElementById('goldSum').textContent = '';
+      document.getElementById('blackSum').textContent = '';
+      document.getElementById('serviceFee').textContent = '';
+      document.getElementById('totalSum').textContent = '';
+    }, 600);
 
     document.getElementById('personName').removeEventListener('input', handleNameInput);
-
+    document.getElementById('savePerson').removeEventListener('click', storePerson);
+    
     document.getElementById('red').removeEventListener('input', handleRed);
-    
-    document.getElementById('redAdd').removeEventListener('click', handleRedAdd);
-    
-    document.getElementById('redMinus').removeEventListener('click', handleRedMinus);
-    
     document.getElementById('silver').removeEventListener('input', handleSilver);
-    
-    document.getElementById('silverAdd').removeEventListener('click', handleSilverAdd);
-    
-    document.getElementById('redMinus').removeEventListener('click', handleSilverMinus);
-    
     document.getElementById('gold').removeEventListener('input', handleGold);
-    
-    document.getElementById('goldAdd').removeEventListener('click', handleGoldAdd);
-    
-    document.getElementById('redMinus').removeEventListener('click', handleGoldMinus);
-    
     document.getElementById('black').removeEventListener('input', handleBlack);
     
+    document.getElementById('redAdd').removeEventListener('click', handleRedAdd);
+    document.getElementById('redMinus').removeEventListener('click', handleRedMinus);
+    document.getElementById('silverAdd').removeEventListener('click', handleSilverAdd);
+    document.getElementById('silverMinus').removeEventListener('click', handleSilverMinus);
+    document.getElementById('goldAdd').removeEventListener('click', handleGoldAdd);
+    document.getElementById('goldMinus').removeEventListener('click', handleGoldMinus);
     document.getElementById('blackAdd').removeEventListener('click', handleBlackAdd);
-    
     document.getElementById('blackMinus').removeEventListener('click', handleBlackMinus);
-    
-    document.getElementById('savePerson').removeEventListener('click', storePerson);
   }
-  
+
   var person = personList[personID];
 
   document.getElementById('personName').value = personList[personID].name;
-  
+
   document.getElementById('red').value = person.red;
   document.getElementById('silver').value = person.silver;
   document.getElementById('gold').value = person.gold;
   document.getElementById('black').value = person.black;
-  
+
   document.getElementById('redSum').textContent = '$' + (person.red * 12).toString();
   document.getElementById('silverSum').textContent = '$' + (person.silver * 17).toString();
   document.getElementById('goldSum').textContent = '$' + (person.gold * 22).toString();
@@ -247,37 +280,34 @@ function initializePerson(personID) {
   document.getElementById('totalSum').textContent = '$' + person.total.toFixed(1);
 
   document.getElementById('personName').addEventListener('input', handleNameInput);
-  
+  document.getElementById('savePerson').addEventListener('click', storePerson);
+
   document.getElementById('red').addEventListener('input', handleRed);
-  
-  document.getElementById('redAdd').addEventListener('click', handleRedAdd);
-  
-    document.getElementById('redMinus').addEventListener('click', handleRedMinus);
-  
   document.getElementById('silver').addEventListener('input', handleSilver);
-
-      document.getElementById('silverAdd').addEventListener('click', handleSilverAdd);
-
-  document.getElementById('silverMinus').addEventListener('click', handleSilverMinus);
-  
   document.getElementById('gold').addEventListener('input', handleGold);
-
-  document.getElementById('goldAdd').addEventListener('click', handleGoldAdd);
-
-  document.getElementById('goldMinus').addEventListener('click', handleGoldMinus);
-  
   document.getElementById('black').addEventListener('input', handleBlack);
 
+  document.getElementById('redAdd').addEventListener('click', handleRedAdd);
+  document.getElementById('redMinus').addEventListener('click', handleRedMinus);
+  document.getElementById('silverAdd').addEventListener('click', handleSilverAdd);
+  document.getElementById('silverMinus').addEventListener('click', handleSilverMinus);
+  document.getElementById('goldAdd').addEventListener('click', handleGoldAdd);
+  document.getElementById('goldMinus').addEventListener('click', handleGoldMinus);
   document.getElementById('blackAdd').addEventListener('click', handleBlackAdd);
-
   document.getElementById('blackMinus').addEventListener('click', handleBlackMinus);
-  
-  document.getElementById('savePerson').addEventListener('click', storePerson);
 }
 
 document.getElementById('welcomeStart').addEventListener('click', () => {
   changeScreen('mainScreen', 'overviewScreen', 0);
   constructPersonList();
+
+  setTimeout(() => {
+    var person = {
+      name: 'Person ' + (personList.length + 1).toString(), red: 0, silver: 0, gold: 0, black: 0, other: [], service: 0, total: 0
+    }
+    personList.push(person);
+    constructPerson(personList.length - 1, 1);
+  }, 1600);
 });
 
 document.getElementById('addPerson').addEventListener('click', () => {
@@ -285,5 +315,5 @@ document.getElementById('addPerson').addEventListener('click', () => {
     name: 'Person ' + (personList.length + 1).toString(), red: 0, silver: 0, gold: 0, black: 0, other: [], service: 0, total: 0
   }
   personList.push(person);
-  constructPerson(personList.length - 1);
+  constructPerson(personList.length - 1, 1);
 });

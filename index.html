@@ -15,50 +15,75 @@
       <span>Bill</span>
       <span>Calculator</span>
     </span>
-    <input type="button" id="welcomeStart" value="Start" />
+    <input type="button" id="welcomeStart" class="primaryButton" value="Start" />
   </div>
   <div id="overviewScreen" class="screen" hidden>
     <div id="personListContainer"></div>
     <div id="totalContainer">
       <h3>Total</h3>
       <span id="totalValue"></span>
+      <input type="button" id="addPerson" class="primaryButton" value="Add Person" />
     </div>
-    <input type="button" id="addPerson" value="Add Person" />
   </div>
   <div id="personScreen" class="screen" hidden>
-    <input type="text" id="personName"></input>
-    <div>
-      <label for="red">Red Dish ($12):</label>
-      <input type="number" id="red" min="0" />
-      <input type="button" id="redAdd" value="+" />
-      <input type="button" id="redMinus" value="-" />
-      <span id="redSum"></span>
+    <div class="personTitle">
+      <img src="image/person.svg" class="personImage" />
+      <input type="text" id="personName"></input>
     </div>
-    <div>
-      <label for="silver">Silver Dish ($17):</label>
-      <input type="number" id="silver" />
-      <input type="button" id="silverAdd" value="+" />
-      <input type="button" id="silverMinus" value="-" />
-      <span id="silverSum"></span>
-    </div>
-    <div>
-      <label for="gold">Gold Dish ($22):</label>
-      <input type="number" id="gold" />
-      <input type="button" id="goldAdd" value="+" />
-      <input type="button" id="goldMinus" value="-" />
-      <span id="goldSum"></span>
-    </div>
-    <div>
-      <label for="black">Black Dish ($27):</label>
-      <input type="number" id="black" />
-      <input type="button" id="blackAdd" value="+" />
-      <input type="button" id="blackMinus" value="-" />
-      <span id="blackSum"></span>
+    <div class="dishContainer">
+      <fieldset>
+        <legend>Red Dish</legend>
+        <span id="redSum"></span>
+        <button id="redAdd" class="iconButton">
+          <img src="image/add.svg" />
+        </button>
+        <input type="number" id="red" min="0" max="9999" />
+        <button id="redMinus" class="iconButton">
+          <img src="image/remove.svg" />
+        </button>
+      </fieldset>
+      <fieldset>
+        <legend>Silver Dish</legend>
+        <span id="silverSum"></span>
+        <button id="silverAdd" class="iconButton">
+          <img src="image/add.svg" />
+        </button>
+        <input type="number" id="silver" min="0" max="9999" />
+        <button id="silverMinus" class="iconButton">
+          <img src="image/remove.svg" />
+        </button>
+      </fieldset>
+      <fieldset>
+        <legend>Gold Dish</legend>
+        <span id="goldSum"></span>
+        <button id="goldAdd" class="iconButton">
+          <img src="image/add.svg" />
+        </button>
+        <input type="number" id="gold" min="0" max="9999" />
+        <button id="goldMinus" class="iconButton">
+          <img src="image/remove.svg" />
+        </button>
+      </fieldset>
+      <fieldset>
+        <legend>Black Dish</legend>
+        <span id="blackSum"></span>
+        <button id="blackAdd" class="iconButton">
+          <img src="image/add.svg" />
+        </button>
+        <input type="number" id="black" min="0" max="9999" />
+        <button id="blackMinus" class="iconButton">
+          <img src="image/remove.svg" />
+        </button>
+      </fieldset>
     </div>
     <div id="otherItems"></div>
-    <input type="button" id="savePerson" value="Save and Exit" />
-    <span id="serviceFee"></span>
-    <span id="totalSum"></span>
+    <div class="personTotalContainer">
+      <h3>10% Service Charge</h3>
+      <span id="serviceFee"></span>
+      <h3>Total</h3>
+      <span id="totalSum"></span>
+    </div>
+    <input type="button" id="savePerson" class="primaryButton" value="Save and Exit" />
   </div>
   <script src="script.js"></script>
 </body>
